@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Speaking Notes</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 内联样式确保立即生效 */
+        .page-title {
+            text-align: center;
+            margin: 2rem 0;
+            color: #2c3e50;
+        }
+        
+        .page-title h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-title p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        /* Speaking Main Layout */
+        .speaking-main-layout {
+            display: flex;
+            gap: 0;
+            align-items: flex-start;
+            margin-top: 2rem;
+        }
+
+        .speaking-left-panel {
+            flex: 0 0 25%;
+            padding: 1.5rem 1rem 1.5rem 1.5rem; /* 恢复左侧padding，让标题和内容左对齐 */
+            border-right: 2px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 250px);
+            overflow: hidden;
+        }
+
+        .speaking-right-panel {
+            flex: 0 0 75%;
+            padding: 1.5rem 1rem 1.5rem 1.5rem; /* 右侧padding减少，为滚动条留空间 */
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 250px);
+            overflow: hidden;
+        }
+
+        /* 滚动容器 */
+        .speaking-left-panel-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0.5rem 0.5rem 0 0.5rem; /* 顶部和左侧padding为阴影留空间，右侧为滚动条，左侧与标题对齐 */
+            scrollbar-width: thin; /* Firefox - 细滚动条 */
+            scrollbar-color: transparent transparent; /* Firefox - 默认透明 */
+        }
+        
+        /* 第一张问题卡片顶部margin，确保顶部阴影不被裁剪 */
+        .speaking-left-panel-content #questionsGrid > .question-card:first-child {
+            margin-top: 0.5rem;
+        }
+
+        .speaking-left-panel-content:hover,
+        .speaking-left-panel-content.scrolling {
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Firefox - hover或滚动时显示 */
+        }
+
+        .speaking-left-panel-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .speaking-left-panel-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .speaking-left-panel-content::-webkit-scrollbar-thumb {
+            background: transparent;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .speaking-left-panel-content:hover::-webkit-scrollbar-thumb,
+        .speaking-left-panel-content.scrolling::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .speaking-left-panel-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .speaking-right-panel-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0.5rem 1rem 0 0.5rem; /* 右侧padding增加到1rem，为滚动条留出空间 */
+            scrollbar-width: thin; /* Firefox - 细滚动条 */
+            scrollbar-color: transparent transparent; /* Firefox - 默认透明 */
+        }
+        
+        /* 文件夹卡片左侧对齐问题卡片 */
+        .speaking-right-panel-content .folder-card {
+            margin-left: 0; /* 移除额外左边距以与左侧问题卡片左对齐 */
+        }
+        
+        /* 已移除：不再为第一张卡片添加额外顶部外边距（旧梯形标签已删除） */
+        .speaking-right-panel-content #notesGrid > .folder-card:first-child,
+        .speaking-right-panel-content #notesGrid > .folder-primary:first-child .folder-card {
+            margin-top: 0; /* 清除多余间距以保证列间对齐 */
+        }
+
+        .speaking-right-panel-content:hover,
+        .speaking-right-panel-content.scrolling {
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Firefox - hover或滚动时显示 */
+        }
+
+        .speaking-right-panel-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .speaking-right-panel-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .speaking-right-panel-content::-webkit-scrollbar-thumb {
+            background: transparent;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .speaking-right-panel-content:hover::-webkit-scrollbar-thumb,
+        .speaking-right-panel-content.scrolling::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .speaking-right-panel-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .panel-header {
+            margin-bottom: 1.5rem; /* 缩短标题和内容之间的距离，更美观 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .panel-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .speaking-left-panel .panel-header {
+            justify-content: space-between;
+            padding-left: 0.5rem; /* 与滚动容器内容对齐 */
+        }
+
+        .speaking-left-panel .panel-header h2 {
+            position: static;
+            margin-right: auto;
+        }
+
+        .speaking-right-panel .panel-header {
+            justify-content: flex-start;
+            padding-left: 0.5rem; /* 与滚动容器内容对齐 */
+        }
+
+        .speaking-right-panel .panel-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .panel-actions {
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-back-arrow {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-back-arrow:hover {
+            opacity: 0.7;
+        }
+
+        .btn-icon-only {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+        }
+
+        .btn-icon-only i {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        /* 文件夹样式 - 参照图片设计 */
+        .folder-container {
+            margin-bottom: 0;
+        }
+
+        .folder-primary {
+            margin-bottom: 0;
+        }
+
+        .folder-secondary {
+            margin-bottom: 0;
+        }
+        
+        /* 笔记卡片在二级分类视图中的间距调整 */
+        #notesGrid .note-card {
+            margin: 0; /* 移除笔记卡片的上下边距，使用grid gap统一管理 */
+        }
+
+        .folder-card {
+            background: var(--background-white);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 1.25rem 1.5rem;
+            padding-top: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+            overflow: visible;
+            display: flex; /* Ensure consistent card height & vertical layout */
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            min-height: 140px; /* 增大最小高度以匹配已有卡片 */
+            height: 140px; /* 固定高度保证完全一致（可改回 min-height 如果需要自适应） */
+            max-width: 100%; /* 防止卡片超出容器 */
+        }
+        
+        /* 一级分类文件夹：稍微减小padding，避免被滚动条切割 */
+        .folder-card.folder-primary {
+            padding: 1.25rem 1.25rem; /* 减小右侧padding */
+            padding-top: 1.5rem;
+        }
+
+        /* 文件夹标签 - 梯形标签已移除（隐藏伪元素） */
+        .folder-card::before {
+            display: none !important;
+        }
+
+        .folder-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .folder-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .folder-dot {
+            width: 8px;
+            height: 8px;
+            background: #8B5CF6;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .folder-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #6B46C1;
+            flex: 1;
+        }
+
+        .folder-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+            gap: 0.75rem;
+            white-space: nowrap; /* 防止右侧操作换行 */
+            height: 34px; /* 固定行高，保证不同卡片对齐 */
+        }
+
+        .folder-counts {
+            color: #9CA3AF;
+            font-size: 0.95rem; /* 统一字号 */
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            line-height: 1;
+        }
+
+        .folder-counts span {
+            display: inline-block;
+        }
+
+        .folder-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-shrink: 0; /* 防止按钮被压缩换行 */
+            height: 34px;
+        }
+
+        .folder-actions button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            color: #9CA3AF;
+            cursor: pointer;
+        }
+
+        .folder-actions i {
+            font-size: 1rem;
+            line-height: 1;
+            vertical-align: middle; /* 保证图标与文本垂直对齐 */
+        }
+
+        .folder-actions {
+            display: flex;
+            gap: 0.25rem;
+            align-items: center;
+        }
+
+        .folder-btn-color {
+            background: none;
+            border: none;
+            color: #9CA3AF;
+            cursor: pointer;
+            padding: 0.35rem;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+        }
+
+        .folder-btn-color:hover {
+            background: var(--background-hover);
+            color: var(--primary-purple);
+        }
+
+        .note-card-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-right: 0.75rem;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .folder-btn-edit,
+        .folder-btn-delete {
+            background: none;
+            border: none;
+            color: #9CA3AF;
+            cursor: pointer;
+            padding: 0.35rem;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+        }
+
+        .folder-btn-edit:hover {
+            background: var(--background-hover);
+            color: #10b981; /* Green for edit */
+        }
+
+        .folder-btn-delete:hover {
+            background: var(--background-hover);
+            color: #ef4444; /* Red for delete */
+        }
+
+        .folder-notes {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* 问题卡片样式 - 参照图片设计 */
+        .question-card {
+            background: var(--background-white);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            border: 2px solid transparent;
+            box-sizing: border-box;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* 不同Part的颜色 - 只在展开时显示边框 */
+        .question-card.expanded[data-part="Part1"] {
+            border: 2px solid #FFA500;
+            background: #FFF8F0;
+        }
+
+        .question-card.expanded[data-part="Part2"] {
+            border: 2px solid #FFB6C1;
+            background: #FFF5F5;
+        }
+
+        .question-card.expanded[data-part="Part3"] {
+            border: 2px solid #90EE90;
+            background: #F0FFF0;
+        }
+
+        .question-card.expanded:not([data-part]) {
+            border: 2px solid #E0E0E0;
+            background: var(--background-white);
+        }
+
+        .question-card {
+            position: relative; /* 添加相对定位，作为菜单按钮的定位基准 */
+        }
+
+        .question-card-header {
+            position: relative;
+        }
+
+        .question-card-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #2c3e50;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .question-card-menu {
+            position: absolute;
+            top: -0.75rem; /* 负值抵消 header 的位置，更靠近圆角 */
+            right: -1.25rem; /* 负值抵消 padding，更靠近圆角 */
+        }
+
+        .question-card-menu-btn {
+            background: none;
+            border: none;
+            color: #9CA3AF;
+            cursor: pointer;
+            padding: 0.25rem;
+            font-size: 0.75rem;
+            line-height: 1;
+            opacity: 0;
+            transition: opacity 0.2s ease, color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .question-card:hover .question-card-menu-btn,
+        .question-card.expanded .question-card-menu-btn {
+            opacity: 1;
+        }
+
+        .question-card-menu-btn:hover {
+            color: #6B7280;
+        }
+
+        .question-card-menu-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.25rem;
+            background: var(--background-white);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: auto;
+            z-index: 100;
+            display: none;
+            overflow: hidden;
+        }
+
+        .question-card-menu-dropdown.show {
+            display: block;
+        }
+
+        .question-card-menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border: none;
+            background: none;
+            width: 100%;
+        }
+
+        .question-card-menu-item:hover {
+            background: var(--background-light);
+        }
+
+        .question-card-menu-item {
+            color: #9CA3AF;
+        }
+
+        .question-card-menu-item:hover {
+            background: var(--background-light);
+            color: #6B7280;
+        }
+
+        .question-card-menu-item i {
+            font-size: 1rem;
+        }
+
+        /* 拖拽相关样式 */
+        .question-card.dragging,
+        .note-card.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+
+        .question-card.drag-over,
+        .note-card.drag-over {
+            border-color: var(--primary-purple) !important;
+            background: rgba(139, 92, 246, 0.05) !important;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2) !important;
+        }
+
+        /* 关联徽章样式 */
+        .question-card-link-badge,
+        .note-card-link-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-left: 0.5rem;
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            font-weight: normal;
+        }
+
+        .question-card-link-badge i,
+        .note-card-link-badge i {
+            font-size: 0.7rem;
+        }
+
+        /* 关联列表样式 */
+        .question-card-linked-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .question-card-linked-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .question-card-linked-header i {
+            color: var(--primary-purple);
+            font-size: 0.9rem;
+        }
+
+        .question-card-linked-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .question-card-linked-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            background: none;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .linked-item-title {
+            color: var(--primary-purple);
+            flex: 1;
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            text-decoration: none;
+        }
+
+        .linked-item-title:hover {
+            color: var(--primary-purple-dark);
+            text-decoration: underline;
+        }
+
+        .linked-item-remove {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.25rem;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.6;
+            margin-left: 0.5rem;
+        }
+
+        .linked-item-remove:hover {
+            color: #ef4444;
+            opacity: 1;
+        }
+
+        /* 笔记详情中关联问题的样式 */
+        .note-linked-questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .note-linked-question-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 0.5rem 0;
+            background: none;
+            border: none;
+        }
+
+        .linked-question-text {
+            color: var(--primary-purple);
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            line-height: 1.5;
+        }
+
+        .linked-question-text:hover {
+            color: var(--primary-purple-dark);
+            text-decoration: underline;
+        }
+
+        .question-card-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0;
+        }
+
+        .question-card.expanded .question-card-details {
+            max-height: 500px;
+            padding-top: 1rem;
+        }
+
+        .question-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .question-card-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .question-card-tag {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            padding: 0.2rem 0.6rem;
+            background: rgba(127, 140, 141, 0.1);
+            border-radius: 12px;
+        }
+
+        .question-card-date {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .question-card-info {
+            margin-top: 0.5rem;
+            font-size: 0.95rem; /* 从0.85rem增加到0.95rem，使文字更大更易读 */
+            color: #555;
+        }
+
+        .question-card-info-item {
+            margin-bottom: 0.5rem;
+            line-height: 1.6; /* 从1.5增加到1.6，增加行间距 */
+        }
+
+        .question-card-info-label {
+            font-weight: 500;
+            color: #2c3e50;
+            margin-right: 0.5rem;
+        }
+        
+        /* 图片预览模态框样式 */
+        .image-preview-modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .image-preview-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .image-preview-content {
+            background: var(--background-white);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px; /* 从90%改为固定600px，使模态框更紧凑 */
+            width: 90%; /* 在小屏幕上仍然响应式 */
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+            cursor: default;
+            position: relative;
+            margin: 0 auto; /* 确保居中 */
+        }
+        
+        @media (max-width: 768px) {
+            .image-preview-content {
+                max-width: 95%;
+                width: 95%;
+                padding: 1.5rem;
+            }
+        }
+        
+        .image-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+        
+        .image-preview-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .image-preview-close {
+            background: var(--background-hover);
+            border: none;
+            color: var(--text-medium);
+            font-size: 1.5rem;
+            font-weight: bold;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            line-height: 1;
+            padding: 0;
+        }
+        
+        .image-preview-close:hover {
+            background: var(--border-light);
+            color: var(--text-dark);
+            transform: rotate(90deg);
+        }
+        
+        .image-preview-body {
+            font-size: 1.1rem; /* 放大预览时的字体大小 */
+            line-height: 1.8;
+            color: var(--text-dark);
+        }
+        
+        .image-preview-question {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .image-preview-answer {
+            margin-top: 1rem;
+        }
+        
+        .image-preview-answer-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+        
+        .image-preview-answer-text {
+            color: var(--text-medium);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .speaking-main-layout {
+                flex-direction: column;
+            }
+
+            .speaking-left-panel {
+                border-right: none;
+                border-bottom: 2px solid var(--border-light);
+            }
+
+            .speaking-right-panel {
+                border-left: none;
+                border-top: 2px solid var(--border-light);
+                margin-left: 0;
+                margin-top: -2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="logo">IELTS Notes</a>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="listening.html">Listening</a></li>
+                <li><a href="reading.html">Reading</a></li>
+                <li><a href="speaking.html" class="active">Speaking</a></li>
+                <li><a href="writing.html">Writing</a></li>
+                <li><a href="vocabulary-reading.html">Vocabulary</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- 简化的页面标题 -->
+        <div class="page-title">
+            <h1><i class="fas fa-microphone"></i> Speaking Notes</h1>
+            <p>Manage your IELTS speaking practice questions and notes</p>
+        </div>
+
+        <!-- 搜索区域 -->
+        <div class="search-section">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="noteSearch" placeholder="Search by keywords...">
+                <button id="clearSearch" class="btn-clear">
+                    Clear
+                </button>
+            </div>
+            <div class="search-stats">
+                <span id="noteCount">Loading...</span>
+            </div>
+        </div>
+        
+        <!-- 主要内容区域：左右分栏 -->
+        <div class="speaking-main-layout">
+            <!-- 左侧：题目管理 -->
+            <div class="speaking-left-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-question-circle"></i> Questions</h2>
+                    <div class="panel-actions">
+                        <button class="btn-add-note btn-icon-only" id="addQuestionBtn" title="Add Question">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="speaking-left-panel-content">
+                    <div id="questionsGrid" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <!-- 动态生成的题目卡片将显示在这里 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧：笔记管理 -->
+            <div class="speaking-right-panel">
+                <div class="panel-header">
+                    <h2>
+                        <i class="fas fa-sticky-note"></i> Notes
+                        <div class="panel-actions">
+                            <button class="btn-add-note btn-icon-only" id="addNoteBtn" title="Add">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn-back-arrow" id="backToParent" style="display: none; background: none; border: none; color: #9CA3AF; cursor: pointer; padding: 0.5rem; font-size: 1.2rem; transition: opacity 0.2s ease; margin-left: 0.5rem;" title="返回上一级">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                        </div>
+                    </h2>
+                </div>
+                <div class="speaking-right-panel-content">
+                    <div id="notesGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;">
+                        <!-- 动态生成的文件夹和笔记卡片将显示在这里 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 添加/编辑题目模态框 -->
+    <div class="modal" id="addQuestionModal" style="display: none;">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 id="questionModalTitle">Add New Question</h3>
+                <button class="modal-close" id="closeQuestionModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="questionForm">
+                    <!-- Part Selection -->
+                    <div class="form-group">
+                        <label for="questionPart">
+                            <i class="fas fa-layer-group"></i> Part
+                        </label>
+                        <select id="questionPart" name="part" class="form-control">
+                            <option value="">Select Part</option>
+                            <option value="Part1">Part 1</option>
+                            <option value="Part2">Part 2</option>
+                            <option value="Part3">Part 3</option>
+                        </select>
+                    </div>
+
+                    <!-- Question -->
+                    <div class="form-group">
+                        <label for="questionText">
+                            <i class="fas fa-question-circle"></i> Question <span class="required">*</span>
+                        </label>
+                        <textarea id="questionText" name="question" class="form-control" rows="3" 
+                                  placeholder="Enter question..." required></textarea>
+                    </div>
+
+                    <!-- Answer -->
+                    <div class="form-group">
+                        <label for="questionAnswer">
+                            <i class="fas fa-check-circle"></i> Answer
+                        </label>
+                        <textarea id="questionAnswer" name="answer" class="form-control" rows="6" 
+                                  placeholder="Enter answer..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-save"></i> Save Question
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加/编辑笔记模态框 -->
+    <div class="modal" id="addNoteModal" style="display: none;">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 id="noteModalTitle">Add New Note</h3>
+                <button class="modal-close" id="closeNoteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="noteForm">
+                    <!-- 根目录：添加一级分类 -->
+                    <div id="addPrimaryCategorySection" class="form-section" style="display: none;">
+                        <div class="form-group">
+                            <label for="primaryCategoryName">
+                                <i class="fas fa-folder"></i> Primary Category Name <span class="required">*</span>
+                            </label>
+                            <input type="text" id="primaryCategoryName" name="primaryCategoryName" class="form-control" 
+                                   placeholder="Enter primary category name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="primaryCategoryColor">
+                                <i class="fas fa-palette"></i> Category Color
+                            </label>
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <input type="color" id="primaryCategoryColor" value="#8B5CF6" 
+                                       style="width: 60px; height: 40px; border: 2px solid var(--border-light); border-radius: 8px; cursor: pointer;">
+                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                    <button type="button" class="color-preset-btn" data-color="#8B5CF6" style="width: 32px; height: 32px; border-radius: 50%; background: #8B5CF6; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                    <button type="button" class="color-preset-btn" data-color="#10B981" style="width: 32px; height: 32px; border-radius: 50%; background: #10B981; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                    <button type="button" class="color-preset-btn" data-color="#3B82F6" style="width: 32px; height: 32px; border-radius: 50%; background: #3B82F6; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                    <button type="button" class="color-preset-btn" data-color="#F59E0B" style="width: 32px; height: 32px; border-radius: 50%; background: #F59E0B; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                    <button type="button" class="color-preset-btn" data-color="#EF4444" style="width: 32px; height: 32px; border-radius: 50%; background: #EF4444; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                    <button type="button" class="color-preset-btn" data-color="#EC4899" style="width: 32px; height: 32px; border-radius: 50%; background: #EC4899; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                    <button type="button" class="color-preset-btn" data-color="#6366F1" style="width: 32px; height: 32px; border-radius: 50%; background: #6366F1; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                    <button type="button" class="color-preset-btn" data-color="#14B8A6" style="width: 32px; height: 32px; border-radius: 50%; background: #14B8A6; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 一级分类视图：添加二级分类 -->
+                    <div id="addSecondaryCategorySection" class="form-section" style="display: none;">
+                        <div class="form-group">
+                            <label for="secondaryCategoryName">
+                                <i class="fas fa-folder-open"></i> Secondary Category Name <span class="required">*</span>
+                            </label>
+                            <input type="text" id="secondaryCategoryName" name="secondaryCategoryName" class="form-control" 
+                                   placeholder="Enter secondary category name" required>
+                        </div>
+                    </div>
+
+                    <!-- 二级分类视图：添加笔记（Topic和五个部分） -->
+                    <div id="addNoteSection" class="form-section" style="display: none;">
+                        <!-- 主题 -->
+                        <div class="form-group">
+                            <label for="topicTitle">
+                                <i class="fas fa-heading"></i> Topic <span class="required">*</span>
+                            </label>
+                            <input type="text" id="topicTitle" name="topicTitle" class="form-control" 
+                                   placeholder="Enter topic" required>
+                        </div>
+
+                        <!-- 描述与事实 -->
+                        <div class="form-group">
+                            <label for="descriptionFacts">
+                                <i class="fas fa-info-circle"></i> Description & Facts
+                            </label>
+                            <textarea id="descriptionFacts" name="descriptionFacts" class="form-control" rows="4" 
+                                      placeholder="Enter description and facts..."></textarea>
+                        </div>
+
+                        <!-- 个人感受与观点 -->
+                        <div class="form-group">
+                            <label for="feelingsOpinions">
+                                <i class="fas fa-heart"></i> Personal Feelings & Opinions
+                            </label>
+                            <textarea id="feelingsOpinions" name="feelingsOpinions" class="form-control" rows="4" 
+                                      placeholder="Enter personal feelings and opinions..."></textarea>
+                        </div>
+
+                        <!-- 原因与影响 -->
+                        <div class="form-group">
+                            <label for="reasonsEffects">
+                                <i class="fas fa-lightbulb"></i> Reasons & Effects
+                            </label>
+                            <textarea id="reasonsEffects" name="reasonsEffects" class="form-control" rows="4" 
+                                      placeholder="Enter reasons and effects..."></textarea>
+                        </div>
+
+                        <!-- 比较与对比 -->
+                        <div class="form-group">
+                            <label for="comparison">
+                                <i class="fas fa-balance-scale"></i> Comparison & Contrast
+                            </label>
+                            <textarea id="comparison" name="comparison" class="form-control" rows="4" 
+                                      placeholder="Enter comparison and contrast..."></textarea>
+                        </div>
+
+                        <!-- 活动与故事 -->
+                        <div class="form-group">
+                            <label for="activitiesStories">
+                                <i class="fas fa-book-open"></i> Activities & Stories
+                            </label>
+                            <textarea id="activitiesStories" name="activitiesStories" class="form-control" rows="4" 
+                                      placeholder="Enter activities and stories..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit" id="submitButton">
+                            <i class="fas fa-save"></i> <span id="submitButtonText">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 题目详情模态框 -->
+    <div class="modal" id="questionDetailsModal" style="display: none;">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h3 id="questionDetailsTitle">Question Details</h3>
+                <div class="modal-header-actions">
+                    <button type="button" class="btn-modal-action btn-edit-note" id="editQuestionBtn" style="display: none;">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button type="button" class="btn-modal-action btn-delete-note-modal" id="deleteQuestionBtn" style="display: none;">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                    <button class="modal-close" id="closeQuestionDetailsModal">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body" id="questionDetailsContent">
+                <!-- 动态生成的题目详情将显示在这里 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑文件夹模态框 -->
+    <div class="modal" id="editFolderModal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 id="editFolderModalTitle">Edit Folder</h3>
+                <button class="modal-close" id="closeEditFolderModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editFolderForm">
+                    <div class="form-group">
+                        <label for="folderNameInput">
+                            <i class="fas fa-folder"></i> Folder Name <span class="required">*</span>
+                        </label>
+                        <input type="text" id="folderNameInput" name="folderName" class="form-control" 
+                               placeholder="Enter folder name" required>
+                    </div>
+                    <div class="form-group" id="editFolderColorGroup" style="display: none;">
+                        <label for="editFolderColor">
+                            <i class="fas fa-palette"></i> Category Color
+                        </label>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <input type="color" id="editFolderColor" value="#8B5CF6" 
+                                   style="width: 60px; height: 40px; border: 2px solid var(--border-light); border-radius: 8px; cursor: pointer;">
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                <button type="button" class="color-preset-btn-edit" data-color="#8B5CF6" style="width: 32px; height: 32px; border-radius: 50%; background: #8B5CF6; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                <button type="button" class="color-preset-btn-edit" data-color="#10B981" style="width: 32px; height: 32px; border-radius: 50%; background: #10B981; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                <button type="button" class="color-preset-btn-edit" data-color="#3B82F6" style="width: 32px; height: 32px; border-radius: 50%; background: #3B82F6; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                <button type="button" class="color-preset-btn-edit" data-color="#F59E0B" style="width: 32px; height: 32px; border-radius: 50%; background: #F59E0B; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                <button type="button" class="color-preset-btn-edit" data-color="#EF4444" style="width: 32px; height: 32px; border-radius: 50%; background: #EF4444; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                <button type="button" class="color-preset-btn-edit" data-color="#EC4899" style="width: 32px; height: 32px; border-radius: 50%; background: #EC4899; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                <button type="button" class="color-preset-btn-edit" data-color="#6366F1" style="width: 32px; height: 32px; border-radius: 50%; background: #6366F1; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                                <button type="button" class="color-preset-btn-edit" data-color="#14B8A6" style="width: 32px; height: 32px; border-radius: 50%; background: #14B8A6; border: 2px solid var(--border-light); cursor: pointer;"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions" style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                        <button type="submit" class="btn-submit">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除文件夹确认模态框 -->
+    <div class="modal" id="deleteFolderModal" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 id="deleteFolderModalTitle">Delete Folder</h3>
+                <button class="modal-close" id="closeDeleteFolderModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="deleteFolderMessage" style="margin-bottom: 1.5rem; color: var(--text-medium); line-height: 1.6;"></p>
+                <div class="form-actions" style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                    <button type="button" class="btn-submit" id="confirmDeleteFolderBtn" style="background: #ef4444;">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 笔记详情模态框 -->
+    <div class="modal" id="noteDetailsModal" style="display: none;">
+        <div class="modal-content" style="max-width: 900px; max-height: 90vh; display: flex; flex-direction: column;">
+            <div class="modal-header">
+                <h3 id="noteDetailsTitle">Note Details</h3>
+                <div class="modal-header-actions">
+                    <button type="button" class="btn-modal-action btn-edit-note" id="editNoteBtn" style="display: none;">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button type="button" class="btn-modal-action btn-delete-note-modal" id="deleteNoteBtn" style="display: none;">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                    <button class="modal-close" id="closeNoteDetailsModal">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body" id="noteDetailsContent" style="overflow-y: auto; flex: 1; max-height: calc(90vh - 120px);">
+                <!-- 动态生成的笔记详情将显示在这里 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 滚动时显示滚动条
+        (function() {
+            const leftContent = document.querySelector('.speaking-left-panel-content');
+            const rightContent = document.querySelector('.speaking-right-panel-content');
+            
+            function handleScroll(element) {
+                let scrollTimeout;
+                element.addEventListener('scroll', function() {
+                    element.classList.add('scrolling');
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(function() {
+                        element.classList.remove('scrolling');
+                    }, 1000);
+                });
+            }
+            
+            if (leftContent) handleScroll(leftContent);
+            if (rightContent) handleScroll(rightContent);
+        })();
+    </script>
+    <!-- 图片预览模态框（双击问题卡片时显示） -->
+    <div class="image-preview-modal" id="imagePreviewModal">
+        <div class="image-preview-content" onclick="event.stopPropagation();">
+            <div class="image-preview-header">
+                <h3>Question Preview</h3>
+                <button class="image-preview-close" id="closeImagePreview">&times;</button>
+            </div>
+            <div class="image-preview-body" id="imagePreviewBody">
+                <!-- 预览内容将在这里动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="speaking.js"></script>
+    <script src="../script.js"></script>
+</body>
+</html>
